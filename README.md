@@ -29,22 +29,21 @@ Your machine should had `nokogiri` installed since it was needed in file `extrac
     
     /*create table keyword */  
     CREATE TABLE IF NOT EXISTS `keyword` (
-    `id` int(11) NOT NULL AUTO_INCREMENT,
     `word` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `id_2` (`id`),
-    KEY `id` (`id`)
+    PRIMARY KEY (`word`),
+    UNIQUE KEY `id`
     ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
     
     /*create table tbl_title */  
      CREATE TABLE IF NOT EXISTS `tbl_title` (
     `title` varchar(128) COLLATE utf8_unicode_ci DEFAULT NULL,
-    `domain` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL
+    `domain` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+    `count` int(11) COLLATE utf8_unicode_ci DEFAULT NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ```
 
 ####2. You may install nokogiri by the following command in shell
-```shell
+```sh
     sudo gem install nokogiri
 ```
 ####3. What each file does
@@ -59,6 +58,10 @@ Your machine should had `nokogiri` installed since it was needed in file `extrac
 ```
     This file aims at scarpy html file from a given url.
     Note that the http implementation is based on socket.
+```
+`netcrawl.rb`
+```
+   To simplify the crawling job using the net/http libs
 ```
 `extract.rb`
 ```
@@ -75,13 +78,13 @@ Your machine should had `nokogiri` installed since it was needed in file `extrac
 #### 4. Make a Try
 Go to command line and `cd` to the dir  of  main.rb and run    
 
-```shell   
+```sh  
     ruby main.rb
 ```
 ###Bug
 However, There still some bugs in this demo. Any suggestion will be welcome. 
 
-*  It will arise ` Connection reset by peer (Errno::ECONNRESET)` error,but i think  that it was
+*  It will arise ` Connection reset by peer (Errno::ECONNRESET)` error,but i think that it was
 caused by  the rejection of  the search engine 
 * speed needs to be improved
 
