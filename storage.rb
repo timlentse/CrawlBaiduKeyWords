@@ -14,7 +14,7 @@ class DBM
   # @parma word, a string
 
   def insert_word(word)
-    puts 'inserting data--'+word+' into table keyword...'
+    puts "Inserting data \e[31m #{word} \e[0m into table `keyword`..."
     sql = "INSERT INTO keyword(word) VALUES ( ? )"
     stmt = @connection.prepare(sql)
     stmt.execute(word)
@@ -25,27 +25,38 @@ class DBM
   # @parma title, a string
   # @parma url, a string
 
-  def insert_title(title,url)
-    puts 'inserting data--'+title+' into table tbl_title...'
-    sql = "INSERT INTO tbl_title(title,domain) VALUES ( ?,? )"
+  def insert_title(title, domain)
+    puts "Inserting title  \e[31m #{title} \e[32m #{domain} \e[0m  into table `tbl_title`..."
+    sql = "INSERT INTO tbl_title(title,domain,count) VALUES ( ?,?,1 )"
     stmt = @connection.prepare(sql)
-    stmt.execute(title,url)
+    stmt.execute(title,domain)
     stmt.close
   end
 
-  # Check if the word exists in database
-  # @parma word, s string
+  #Update the table's count 
+  # @parma table, s string
+  # @parma field, s string
+
+  def update_table(table, field, title_value)
+    sql = "UPDATE #{table} SET #{field}=#{field}+1 WHERE title = ?"
+    stmt = @connection.prepare(sql)
+    stmt.execute(title_value)
+    stmt.close
+  end
+
+  # Check if the item exists in database
+  # @parma item, s string
   # @parma table, s string
   # @return boolean
 
-  def is_existed(word,table);
+  def is_existed(item, table);
     if table ==='keyword'
       sql = 'SELECT word FROM keyword WHERE word = ?'
     else
       sql = 'SELECT title FROM tbl_title WHERE title = ?'
     end
     stmt = @connection.prepare(sql)
-    stmt.execute(word)
+    stmt.execute(item)
     result = stmt.fetch
     stmt.close
     return result!=nil

@@ -29,7 +29,7 @@ def extract_target(file)
   end
 
   for word in rs_nodes
-    related_words[get_text(word)] = word.xpath("./@href")
+    related_words[get_text(word)] = word.xpath("./@href").first.value
   end
   return related_words, top_ten_titles
 end
