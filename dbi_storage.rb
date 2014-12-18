@@ -1,31 +1,46 @@
 
+# This is a class for database's curd manipulation  using dbi libs
+
 require "dbi"
 
 class DBIM
-  # connect to the MySQL server
+
+  # Connect to the MySQL server
+  # Change the following to meet your need if necessary
   def initialize
-    @connection = DBI.connect("DBI:Mysql:Keywords_ruby:localhost","root", "11311048")
+    @connection = DBI.connect("DBI:Mysql:ruby:localhost","root", "11311048")
   end
 
+  # Insert the words into database
+  # @parma word, a string
+
   def insert_word(word)
-     sth = @connection.prepare("insert into table keyword(word) values(?)")
+     sth = @connection.prepare("INSERT INTO keyword(word) VALUES(?)")
      sth.execute(word)
      sth.finish
   end
 
+  # Insert title and domain into database
+  # @parma title, a string
+  # @parma domain, a string
+
   def insert_title(title, domain)
-    sth = @connection.prepare("insert into table tbl_title(title, domain) values(?,?)")
+    sth = @connection.prepare("INSERT INTO tbl_title(title, domain, count) VALUES(?, ?, 1)")
     sth.execute(title, domain)
     sth.finish
   end
 
-  def is_exists(item, table)
-    field = table==='tbl_title'? 'title':'keyword'
-    sql = "select #{field} from #{table} where #{field}=#{item}"
+  # Checks if the item exists in database
+  # @parma item, a string
+  # @parma table, a string
+  # @return boolean
+  def is_existed(item, table)
+    field = table==='tbl_title'? 'title':'word'
+    sql = "SELECT #{field} FROM #{table} WHERE #{field}='#{item}'"
     sth = @connection.prepare(sql)
     sth.execute()
-    result = sth.fetch
-    if result !=nil
+    result = sth.rows
+    if result!=nil
       sth.finish
       return true
     else
@@ -34,8 +49,20 @@ class DBIM
     end
   end
 
-   # disconnect from server
+  # Update the table's count 
+  # @parma table, s string
+  # @parma field, s string
+
+  def update_table(table, field, title_value)
+    sql = "UPDATE #{table} SET #{field}=#{field}+1 WHERE title = ?"
+    stmt = @connection.prepare(sql)
+    stmt.execute(title_value)
+    stmt.finish
+  end
+
+   # Disconnect from server
   def disconnect
      @connection.disconnect if @connection
   end
+
 end
