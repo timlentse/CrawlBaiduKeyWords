@@ -7,10 +7,10 @@ class DBM
   # Change the following to meet your need
 
   def initialize
-    @connection = Mysql::new("localhost", "root", "11311048", "Keywords_ruby")
+    @connection = Mysql::new("localhost", "root", "11311048", "ruby")
   end
 
-  # Insert the words into database
+  # Insert the keywords into database
   # @parma word, a string
 
   def insert_word(word)
@@ -21,9 +21,9 @@ class DBM
     stmt.close
   end
 
-  # Insert the title and url into database
+  # Insert title and domain into database
   # @parma title, a string
-  # @parma url, a string
+  # @parma domain, a string
 
   def insert_title(title, domain)
     puts "Inserting title  \e[31m #{title} \e[32m #{domain} \e[0m  into table `tbl_title`..."
@@ -33,7 +33,7 @@ class DBM
     stmt.close
   end
 
-  #Update the table's count 
+  # Update the table's count 
   # @parma table, s string
   # @parma field, s string
 
@@ -44,9 +44,9 @@ class DBM
     stmt.close
   end
 
-  # Check if the item exists in database
-  # @parma item, s string
-  # @parma table, s string
+  # Checks if the item exists in database
+  # @parma item, a string
+  # @parma table, a string
   # @return boolean
 
   def is_existed(item, table);
