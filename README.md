@@ -25,13 +25,12 @@ Your machine should had `nokogiri` installed since it was needed in file `extrac
 #### 1. Create database and two tables
 ```sql  
     /*create database */     
-    create database keywords_ruby 
+    CREATE DATABASE IF NOT EXISTS ruby 
     
     /*create table keyword */  
     CREATE TABLE IF NOT EXISTS `keyword` (
     `word` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
-    PRIMARY KEY (`word`),
-    UNIQUE KEY `id`
+    PRIMARY KEY (`word`),UNIQUE KEY `id`
     ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
     
     /*create table tbl_title */  
@@ -43,7 +42,7 @@ Your machine should had `nokogiri` installed since it was needed in file `extrac
 ```
 
 ####2. You may install nokogiri by the following command in shell
-```sh
+```bash
     sudo gem install nokogiri
 ```
 ####3. What each file does
@@ -75,10 +74,15 @@ Your machine should had `nokogiri` installed since it was needed in file `extrac
     As the name suggested, it is a class for manipulating database ,for example: 
     insert data, checksif a given word existes in table.
 ```
+`dbi_storage.rb`
+```
+    Add a alternative method for storing data using dbi,
+    You should install 'dbi' and 'dbd_mysql'
+```
 #### 4. Make a Try
 Go to command line and `cd` to the dir  of  main.rb and run    
 
-```sh  
+```bash
     ruby main.rb
 ```
 ###Bug
