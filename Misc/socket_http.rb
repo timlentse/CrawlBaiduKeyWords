@@ -8,7 +8,7 @@ require 'thread'               # Get some thread api
 # Send http request to baidu using socket and received response
 #   @parma string, the path of a http request
 #   @Return string, the response data
-def fetch( path='/' )
+def fetch_html( path='/' )
 
     host = 'www.baidu.com'     # The domain of baidu, my target website
     port = 80                  # Default HTTP port
@@ -52,7 +52,7 @@ def fetch( path='/' )
     return header, body
 end
 
-# extract domain from headers 
+# Extract domain from headers 
 #   @parma header, a string 
 #   @Return string, the domain
 def get_domain( header )
