@@ -1,19 +1,18 @@
 require "BaiduKeyWords/version"
 require 'nokogiri'
 require 'net/http'
+require 'timeout'
 require 'uri'
 module BaiduKeyWords
 
   def self.fetch(uri_str, limit = 10)
     puts uri_str
     # You should choose a better exception.
-    raise ArgumentError, 'too many HTTP redirects' if limit == 0
+    raise ArgumentError, 'Too many HTTP redirects' if limit == 0
     begin
+    # Add timeout to pass the bad uri
+    timeout(5){
     @response = Net::HTTP.get_response(URI(uri_str))
-    rescue =>e
-      p e
-      return nil, nil
-    end
     case @response
     when Net::HTTPSuccess then
       return @response.body, self.domain(uri_str)
@@ -22,6 +21,14 @@ module BaiduKeyWords
       fetch(location, limit - 1)
     else
       @response.value
+    end
+    }
+    rescue =>e
+      if e.class==Timeout::Error
+        self.fetch(uri_str)
+      else
+        return nil, nil
+      end
     end
   end
 

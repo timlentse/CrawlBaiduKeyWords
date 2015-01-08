@@ -1,7 +1,3 @@
-=begin
-  This part is used as the main function of the whole project
-=end
-
 # Require needed files
 require 'BaiduKeyWords'
 Utility_Dir = File.expand_path(File.dirname(__FILE__))
@@ -11,18 +7,19 @@ desc "The is the crawl job of the gem"
   task :crawl_job do
     Initial_Search ='http://www.baidu.com/s?wd=elong'  # initial keyword, you can change it
     counter = 0      
-    query = Array.new # Array stores the the keywords pending to be queried
+    query = Queue.new # Array stores the the keywords pending to be queried
     query.push(Initial_Search)
     MAX = 100000
     tbl_title = Queue.new
     tbl_keyword = Queue.new
     Thread_Num = 10
 
-  #crawlers = (0...Thread_Num).map do
-   crawler = Thread.new do
+  crawlers = (0...Thread_Num).map do
+    Thread.new do
       while counter < MAX do 
           tmp = []
-          while !query.empty? && counter < MAX do 
+          while !query.empty? && counter < MAX do
+            sleep(0.1) 
             item = query.pop        # pop item from query and used as keyword search
             begin
             body, domain = BaiduKeyWords.fetch(item)
@@ -48,14 +45,14 @@ desc "The is the crawl job of the gem"
             }
             rescue => e
               p e
-              sleep(5)
+              sleep(2)
               next
             end
           end
         query = tmp
         end
       end
-   # end
+    end
 
     writer = Thread.new do
       # wait for workers
@@ -76,8 +73,8 @@ desc "The is the crawl job of the gem"
     end
 
 # join the thread
-#crawlers.map(&:join)
-crawler.join
+crawlers.each{|thr| thr.join}
+#crawler.join
 writer.join
 end
 
